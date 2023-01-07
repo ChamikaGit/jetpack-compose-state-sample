@@ -11,20 +11,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chami.statejetpackcomposeapplication.ui.theme.StateJetpackComposeApplicationTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            val viewModel = viewModel<MyViewModel>()
+
             StateJetpackComposeApplicationTheme {
                 //This type called Unidirectional data flow
                 //We send the data from caller to it composable function
@@ -33,11 +36,14 @@ class MainActivity : ComponentActivity() {
 //                var count by remember { mutableStateOf(0) }
 
                 //if we want to preserve our state from android configuration changes,
-                //we can use rememberSavable{} block
-                var count by rememberSaveable{mutableStateOf(0)}
+                //1) we can use rememberSavable{} block
+                // var count by rememberSaveable{mutableStateOf(0)}
+                //2) we can use out viewModel instance instead of above implementation to preserve the state
+                val count = viewModel.count
 
                 ButtonUI(count) {
-                    count = it + 1
+//                    count = it + 1
+                    viewModel.increaseCount()
                 }
             }
         }
@@ -85,7 +91,7 @@ fun ButtonUI(currentCount: Int, updateCurrentCount: (Int) -> Unit) {
 @Composable
 fun DefaultPreview() {
     StateJetpackComposeApplicationTheme {
-        ButtonUI(10){
+        ButtonUI(10) {
 
         }
     }
