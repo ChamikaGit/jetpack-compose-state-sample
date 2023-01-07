@@ -12,6 +12,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,7 +29,13 @@ class MainActivity : ComponentActivity() {
                 //This type called Unidirectional data flow
                 //We send the data from caller to it composable function
                 //and we get the events from composable function to it's caller
-                var count by remember { mutableStateOf(0) }
+
+//                var count by remember { mutableStateOf(0) }
+
+                //if we want to preserve our state from android configuration changes,
+                //we can use rememberSavable{} block
+                var count by rememberSaveable{mutableStateOf(0)}
+
                 ButtonUI(count) {
                     count = it + 1
                 }
