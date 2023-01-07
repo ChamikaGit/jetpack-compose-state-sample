@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StateJetpackComposeApplicationTheme {
+
                 ButtonUI()
             }
         }
@@ -42,13 +43,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ButtonUI() {
-    //Need to wrap this remember block.
-    //remember used as a guard against recomposition
-    //If we not use remember block{}.During recomposition mutableStateOf value state going back to the initial state.
-    //val count = remember { mutableStateOf(true) }
-    //using kotlin delegate function we can change this structure and can do our code more conses
-    var count by remember { mutableStateOf(true) }
-
+    var count by remember { mutableStateOf(0) }
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,23 +54,16 @@ fun ButtonUI() {
     ) {
         Button(
             onClick = {
-//                      count.value = count.value+1
-                count = !count
+                count += 1
+
             },
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Cyan,
                 contentColor = Color.Black
             ), elevation = ButtonDefaults.elevation(10.dp),
             shape = RoundedCornerShape(5.dp),
-            modifier = Modifier.padding(
-                bottom = if (count) {
-                    10.dp
-                } else {
-                    50.dp
-                }
-            )
         ) {
-            Text(text = "My Count ${count}", fontSize = 16.sp)
+            Text(text = "My Count $count", fontSize = 17.sp)
         }
 
     }
