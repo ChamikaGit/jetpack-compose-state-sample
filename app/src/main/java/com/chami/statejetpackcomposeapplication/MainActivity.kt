@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -26,8 +25,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StateJetpackComposeApplicationTheme {
-
-                ButtonUI()
+                var count by remember { mutableStateOf(0) }
+                ButtonUI(count) {
+                    count = it + 1
+                }
             }
         }
     }
@@ -42,9 +43,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun ButtonUI() {
-    var count by remember { mutableStateOf(0) }
-    
+fun ButtonUI(currentCount: Int, updateCurrentCount: (Int) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,16 +53,17 @@ fun ButtonUI() {
     ) {
         Button(
             onClick = {
-                count += 1
+                updateCurrentCount(currentCount)
 
             },
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Cyan,
                 contentColor = Color.Black
-            ), elevation = ButtonDefaults.elevation(10.dp),
+            ),
+            elevation = ButtonDefaults.elevation(10.dp),
             shape = RoundedCornerShape(5.dp),
         ) {
-            Text(text = "My Count $count", fontSize = 17.sp)
+            Text(text = "My Count $currentCount", fontSize = 17.sp)
         }
 
     }
@@ -75,6 +75,8 @@ fun ButtonUI() {
 @Composable
 fun DefaultPreview() {
     StateJetpackComposeApplicationTheme {
-        ButtonUI()
+        ButtonUI(10){
+
+        }
     }
 }
