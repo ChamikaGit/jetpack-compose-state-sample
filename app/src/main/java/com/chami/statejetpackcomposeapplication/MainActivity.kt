@@ -25,6 +25,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StateJetpackComposeApplicationTheme {
+                //This type called Unidirectional data flow
+                //We send the data from caller to it composable function
+                //and we get the events from composable function to it's caller
                 var count by remember { mutableStateOf(0) }
                 ButtonUI(count) {
                     count = it + 1
